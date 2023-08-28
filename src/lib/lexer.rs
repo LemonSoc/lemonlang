@@ -269,7 +269,7 @@ impl Lexer {
 
     fn at_whitespace(&self) -> bool {
         match self.scanner.peek_next() {
-            Some(c) => c == '\n' || c == '\t' || c == '\r' || c == ' ',
+            Some(c) => matches!(c, '\n' | '\t' | '\r' | ' '),
             None => false,
         }
     }
