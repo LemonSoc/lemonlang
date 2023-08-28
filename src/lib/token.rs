@@ -75,3 +75,9 @@ pub enum Token {
     // TODO: Should have associated Error Variants?
     Error,
 }
+
+impl Token {
+    pub fn same_variant(&self, other: Token) -> bool {
+        std::mem::discriminant(self) == std::mem::discriminant(&other)
+    }
+}

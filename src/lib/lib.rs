@@ -1,5 +1,6 @@
 pub mod ast;
 mod lexer;
+pub mod parser;
 mod scanner;
 mod tests;
 mod token;

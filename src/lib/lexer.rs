@@ -17,6 +17,10 @@ impl Lexer {
         };
     }
 
+    pub fn peek_next(&mut self) -> Option<Token> {
+        self.peek(0)
+    }
+
     pub fn peek(&mut self, idx: usize) -> Option<Token> {
         if idx < self.lookahead.len() {
             return self.lookahead.get(idx).cloned();
@@ -305,6 +309,10 @@ impl Lexer {
         let next = self.scanner.next();
         trace!("Accepting: {:?}", next);
         next
+    }
+
+    pub fn empty(&self) -> bool {
+        self.scanner.peek_next().is_none()
     }
 }
 
