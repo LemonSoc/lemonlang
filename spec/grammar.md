@@ -60,7 +60,7 @@ Variables can be declared with the `let` keyword.
 Not that any `<ident>` on the LHS must be an unqualified identifier.
 
 ```html
-<decl-expr>  = "let" <ident> "=" <expr> 
+<decl-expr>  = "let" <ident> (":" <type>)? "=" <expr> 
 TODO
 ```
 
@@ -70,10 +70,15 @@ TODO
 The syntax for a closure is:
 
 ```html
-<closure>           = (<type> "from")?  <para-list> "->" <expr>
-<paralist>          = "(" <proper-para-list>? ")"
-<proper-para-list>  = <para-decl> ( "," <para-decl> )*
-<para-decl>         = <ident> ":" <type>
+<closure-type>           = <type> "from" <type-list>
+<para-list>               = "(" <para-decl> ")"
+<para-decl>              = <ident> (":" <type>) 
+
+<closure>                = "fn" <para-list> "->" <expr>
+<arglist>                = <arg>+ | "(" <arg>* ")"
+<arg>                    = <ident> (":" <type>)?
+
+<type-list>              = <type>*
 ```
 
 Functions are treated as bindings to closures.
@@ -98,21 +103,21 @@ to a normal `<decl>.`
 
 ```rust
 // Closure binding: Explicit Type Required
-let double = i32 from (x: i32) -> x * 2;
+let double: i32 from (i32) = fn x -> x * 2;
 // Closure with compound statement
-let double = i32 from (x: i32) -> {
+let double = i32 from i32 = fn x -> {
     foo(x);
     x * 2
 };
 // Closure with discarded return using tilde
-let remove_top = (v: Vec<i32>) -> ~v.pop();
+let remove_top = fn (v: Vec<i32>) -> ~v.pop();
 // Closure with discarded return using compound statement
 let remove_top = (v: Vec<i32>) -> { v.pop(); };
 
-// As argument - Type ommitted
+// Passing closure as an argument to `.map`
 foo_iter()
-    .map((x: i32) -> x * 2) // Type omitted
-    .map(i32 from (x: i32) -> x * 2) // Explicit Type
+    .map (fn (x: i32) -> x * 2) // Arg type included
+    .map (fn x -> x * 2)        // Arg type omitted
 ```
 
 # Expressions and Statements
